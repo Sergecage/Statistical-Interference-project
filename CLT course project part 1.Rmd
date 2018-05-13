@@ -1,0 +1,52 @@
+---
+title: "Statistical Inference Course project CLT"
+author: "Sergei Keidzh"
+date: 'May 13 2018'
+output: pdf_document
+---
+
+#Exponential distribution Compare with the Central Limit Theorem
+```{r,echo=TRUE}
+setwd("C:/Users/Клеопатра/Desktop/serg/data/statistical inference")
+library(ggplot2)
+lambda <- 0.2
+mu <- 1/lambda
+stdDev <- 1/lambda
+Expo<- 40
+Sim <- 1:1000
+```
+# To make it reproducible we set the variable 
+```{r}
+set.seed(909)
+```
+
+# obtains the mean 
+```{r}
+sample1 <- function(v) {mean(rexp(Expo, lambda))}
+```
+# distribution of 1000 averages of  random uniforms
+```{r,echo=TRUE}
+mns = NULL
+for (i in 1 : 1000) mns = c(mns, mean(sample1()))
+```
+
+```{r}
+
+dat <- data.frame(x = mns)
+mu
+mean(dat$x)
+mu/sqrt(Expo)
+var(dat$x)
+g <- ggplot(dat, aes(x = x)) 
+g <- g + geom_histogram(binwidth=.3, colour = "blue", fill="green", 
+                        aes(y = ..density..)) 
+g <- g + ggtitle("Density of 40") 
+g <- g + xlab("Means") + ylab("Density")
+
+g <- g + stat_function(fun = dnorm, args=list( mean= mu, sd=sd(dat$x) ), 
+                       color="red", size=1)
+g <- g + theme_bw()
+
+g
+```
+#according to the ananlysis and figure we can see that the distribution with the mean values of 1000 is a normal distribution. 
