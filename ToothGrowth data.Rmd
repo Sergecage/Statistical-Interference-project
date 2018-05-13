@@ -1,0 +1,53 @@
+---
+title: "Statistical inference part 2"
+author: "Sergei Keidzh"
+date: 'May 13 2018'
+output: html_document
+---
+```{r}
+setwd("C:/Users/Клеопатра/Desktop/serg/data/statistical inference")
+library(datasets)
+library(ggplot2)
+data(ToothGrowth)
+str(ToothGrowth)
+head(ToothGrowth)
+```
+#to make it reproducible it's better to convert variable to factor 
+#in this case variable dose 
+```{r}
+ToothGrowth$dose <- as.factor(ToothGrowth$dose)
+```
+#let's review again 
+```{r}
+str(ToothGrowth)
+```
+#provide a basic summary
+```{r}
+summary(ToothGrowth)
+```
+# split of cases between different dose levels and delivery methods
+```{r}
+table(ToothGrowth$dose, ToothGrowth$supp)
+ggplot(data=ToothGrowth, aes(x=as.factor(dose), y=len, fill=supp))+
+  geom_bar(stat="identity",)+
+  facet_grid(. ~ supp)+
+  xlab("Dose")+
+  ylab("Tooth length")+
+  guides(fill=guide_legend(title="Supplement type"))
+```
+#on the figure we can see how vitamin C influenced in positive way on
+#tooth length which has been dependend on dose of vitamin. 
+
+#Use confidence intervals and/or hypothesis tests to compare tooth growth by supp and dose. 
+#(Only use the techniques from class, even if there's other approaches worth considering)
+```{r}
+data2 <- lm(len ~ dose + supp, data=ToothGrowth)
+
+summary(data2)
+```
+#As we can see the Vitamin C provides more tooth growth than ascorbic acid at lower dosages (0.5 Mg - 1 Mg).
+#The tooth growth rate is not statistically different between supplement methods at the higher dosage
+#Dose is  the key factor in tooth growth. If the dose is  more higher, the more grow for the teeth.
+#The variances between the sample popluations are not equal
+#The sample data is not paired
+#The sample population distribution is mound shaped and not skewed
